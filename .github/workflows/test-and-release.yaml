@@ -1,0 +1,98 @@
+name: Test and Release
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+  issues: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ROLE: ${{ secrets.AWS_ROLE }}
+  CI: 1
+  FORCE_COLOR: 3
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-22.04
+
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Keep npm cache around to speed up installs
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: build-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Check TypeScript
+        run: npx tsc
+
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.AWS_ROLE }}
+          role-session-name: github-action-public-parameter-registry
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Generate Stack ID
+        run: |
+          RANDOM_STRING=`node -e "const crypto = require('crypto'); process.stdout.write(crypto.randomBytes(Math.ceil(8 * 0.5)).toString('hex').slice(0, 8));"`
+          echo "STACK_NAME=nrf-guide-test-${RANDOM_STRING}" >> $GITHUB_ENV
+
+      - name: Deploy solution stack
+        run: npx cdk deploy --require-approval never
+
+      - name: Run End-to-End Tests
+        run: npm run test:e2e
+
+      - name: Clean up End-to-End test resources
+        if: always()
+        run: |
+          npx cdk destroy -f
+
+  release:
+    needs:
+      - e2e-tests
+
+    runs-on: ubuntu-22.04
+
+    if: github.ref == 'refs/heads/saga'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Keep npm cache around to speed up installs
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: build-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Semantic release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
