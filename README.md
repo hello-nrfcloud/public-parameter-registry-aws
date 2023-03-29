@@ -41,3 +41,22 @@ npm ci
 ```bash
 npx cdk deploy
 ```
+
+## CI with GitHub Actions
+
+Configure the AWS credentials for an account used for CI, then run
+
+```bash
+npx cdk --app 'npx tsx cdk/ci.ts' deploy
+```
+
+This creates a role with Administrator privileges in that account, and allows
+the GitHub repository of this repo to assume it.
+
+Store the role name from the output as a GitHub Action secret:
+
+```bash
+ROLE_ARN=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry}-ci | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "roleArn") | .OutputValue' | sed -E 's/\/$//g'`
+gh secret set AWS_REGION --body "${AWS_REGION}"
+gh secret set AWS_ROLE --body "${ROLE_ARN}"
+```

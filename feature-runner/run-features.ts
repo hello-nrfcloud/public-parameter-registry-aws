@@ -1,9 +1,8 @@
 import { CloudFormationClient } from '@aws-sdk/client-cloudformation'
 import { runFolder } from '@nordicsemiconductor/bdd-markdown'
 import { stackOutput } from '@nordicsemiconductor/cloudformation-helpers'
-import { randomUUID } from 'node:crypto'
 import path from 'node:path'
-import type { StackOutputs as BackendStackOutputs } from '../cdk/RegistryStack.js'
+import type { StackOutputs } from '../cdk/RegistryStack.js'
 import { STACK_NAME } from '../cdk/stackConfig.js'
 
 /**
@@ -13,12 +12,13 @@ import { STACK_NAME } from '../cdk/stackConfig.js'
  * step runners and reporters.
  */
 
-const config = await stackOutput(
-	new CloudFormationClient({}),
-)<BackendStackOutputs>(STACK_NAME)
+const config = await stackOutput(new CloudFormationClient({}))<StackOutputs>(
+	STACK_NAME,
+)
 
-const tenantId = randomUUID()
-export type World = {}
+export type World = {
+	registryEndpoint: string
+}
 
 const runner = await runFolder<World>({
 	folder: path.join(process.cwd(), 'features'),
@@ -26,10 +26,7 @@ const runner = await runFolder<World>({
 })
 
 const res = await runner.run({
-	websocketUri: config.webSocketURI,
-	devicesTable: config.devicesTable,
-	websocketQueueUri: config.webSocketQueueURI,
-	tenantId,
+	registryEndpoint: config.registryEndpoint,
 })
 
 console.log(JSON.stringify(res, null, 2))
