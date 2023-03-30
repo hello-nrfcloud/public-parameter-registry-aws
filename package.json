@@ -26,7 +26,7 @@
   "license": "BSD-3-Clause",
   "devDependencies": {
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "12.0.13",
-    "@nordicsemiconductor/bdd-markdown": "3.5.39",
+    "@nordicsemiconductor/bdd-markdown": "3.5.41",
     "@nordicsemiconductor/cloudformation-helpers": "8.0.0",
     "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "13.0.1",
     "@swc/cli": "0.1.62",
