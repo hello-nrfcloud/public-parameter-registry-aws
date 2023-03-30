@@ -28,8 +28,10 @@ export class CIStack extends Stack {
 				ghProvider.openIdConnectProviderArn,
 				{
 					StringEquals: {
-						[`${githubDomain}:sub`]: `repo:${r.owner}/${r.repo}:ref:refs/heads/*`,
 						'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+					},
+					StringLike: {
+						[`${githubDomain}:sub`]: `repo:${r.owner}/${r.repo}:ref:refs/heads/*`,
 					},
 				},
 			),
