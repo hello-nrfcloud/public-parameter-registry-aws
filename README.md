@@ -42,6 +42,17 @@ npm ci
 npx cdk deploy
 ```
 
+### Setting parameters
+
+Use SSM:
+
+```bash
+aws ssm put-parameter --name /${STACK_NAME:-public-parameter-registry}/public/some-parameter --type String --value "Some Value"
+```
+
+For parameters to be published, they must be below the path
+`/<stack name>/public/`.
+
 ## CI with GitHub Actions
 
 Configure the AWS credentials for an account used for CI, then run

@@ -1,16 +1,12 @@
 import { CloudFormationClient } from '@aws-sdk/client-cloudformation'
+import { SSMClient } from '@aws-sdk/client-ssm'
 import { runFolder } from '@nordicsemiconductor/bdd-markdown'
 import { stackOutput } from '@nordicsemiconductor/cloudformation-helpers'
+import { randomUUID } from 'node:crypto'
 import path from 'node:path'
 import type { StackOutputs } from '../cdk/RegistryStack.js'
 import { STACK_NAME } from '../cdk/stackConfig.js'
-
-/**
- * This file configures the BDD Feature runner
- * by loading the configuration for the test resources
- * (like AWS services) and providing the required
- * step runners and reporters.
- */
+import { steps } from './steps.js'
 
 const config = await stackOutput(new CloudFormationClient({}))<StackOutputs>(
 	STACK_NAME,
@@ -18,6 +14,9 @@ const config = await stackOutput(new CloudFormationClient({}))<StackOutputs>(
 
 export type World = {
 	registryEndpoint: string
+	stackName: string
+	randomString: string
+	randomNumber: number
 }
 
 const runner = await runFolder<World>({
@@ -25,9 +24,17 @@ const runner = await runFolder<World>({
 	name: 'Public Parameter Registry',
 })
 
+const stepDefs = steps({ ssm: new SSMClient({}) })
+runner.addStepRunners(...stepDefs.steps)
+
 const res = await runner.run({
 	registryEndpoint: config.registryEndpoint,
+	stackName: STACK_NAME,
+	randomNumber: Math.floor(Math.random() * 1000000),
+	randomString: randomUUID(),
 })
+
+await stepDefs.cleanup()
 
 console.log(JSON.stringify(res, null, 2))
 

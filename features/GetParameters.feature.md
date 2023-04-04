@@ -1,22 +1,27 @@
+---
+retry:
+  initialDelay: 1000
+---
+
 # Get Parameters
 
 > A client can access the published parameters using a HTTP REST request
 
+## Background
+
+Given `${randomString}` is stored in `aStringParameter`
+
+And `${randomNumber}` is stored in `example/aNumberParameter`
+
 ## Get the parameters
 
-Given the string `someValue` is stored in `aStringParameter`
-
-And the number `42` is stored in `example/aNumberParameter`
-
-When I GET `{registryEndpoint}`
-
-Then the result should match this JSON
+Soon the result of GET `${registryEndpoint}` should match this JSON
 
 ```json
 {
-  "aStringParameter": "someValue",
+  "aStringParameter": "${randomString}",
   "example": {
-    "aNumberParameter": 42
+    "aNumberParameter": ${randomNumber}
   }
 }
 ```
