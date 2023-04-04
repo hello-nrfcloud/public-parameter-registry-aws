@@ -56,9 +56,20 @@ export const steps = ({
 						step.title,
 					)
 				if (match === null) return noMatch
-				const res = await (await fetch(match?.groups?.url ?? '')).json()
-				debug(res)
-				check(res).is(objectMatching(JSON.parse(codeBlockOrThrow(step).code)))
+				const res = await fetch(match?.groups?.url ?? '')
+				res.headers.forEach((v, k) => debug(`${v}: ${k}`))
+				const body = await res.text()
+				debug(body)
+				let registry: Record<string, any> = {}
+				try {
+					registry = JSON.parse(body)
+				} catch {
+					throw new Error(`Failed to parse body as JSON: ${body}`)
+				}
+				check(registry).is(
+					objectMatching(JSON.parse(codeBlockOrThrow(step).code)),
+				)
+				return registry
 			},
 		],
 		cleanup: async () => {

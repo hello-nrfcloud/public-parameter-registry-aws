@@ -1,6 +1,6 @@
 ---
 retry:
-  initialDelay: 1000
+  initialDelay: 5000
 ---
 
 # Get Parameters
