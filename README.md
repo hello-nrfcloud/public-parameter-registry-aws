@@ -53,6 +53,20 @@ aws ssm put-parameter --name /${STACK_NAME:-public-parameter-registry}/public/so
 For parameters to be published, they must be below the path
 `/<stack name>/public/`.
 
+## CD with GitHub Actions
+
+Create a GitHub environment `production`.
+
+<!-- FIXME: add CLI comment -->
+
+Store the role name from the output as a GitHub Action secret:
+
+```bash
+CD_ROLE_ARN=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry} | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "cdRoleArn") | .OutputValue' | sed -E 's/\/$//g'`
+gh variable set AWS_REGION --env production --body "${AWS_REGION}"
+gh secret set AWS_ROLE --env production --body "${CD_ROLE_ARN}"
+```
+
 ## CI with GitHub Actions
 
 Configure the AWS credentials for an account used for CI, then run
@@ -64,10 +78,14 @@ npx cdk --app 'npx tsx cdk/ci.ts' deploy
 This creates a role with Administrator privileges in that account, and allows
 the GitHub repository of this repo to assume it.
 
+Create a GitHub environment `ci`.
+
+<!-- FIXME: add CLI comment -->
+
 Store the role name from the output as a GitHub Action secret:
 
 ```bash
-ROLE_ARN=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry}-ci | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "roleArn") | .OutputValue' | sed -E 's/\/$//g'`
-gh secret set AWS_REGION --body "${AWS_REGION}"
-gh secret set AWS_ROLE --body "${ROLE_ARN}"
+CI_ROLE_ARN=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry}-ci | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "roleArn") | .OutputValue' | sed -E 's/\/$//g'`
+gh variable set AWS_REGION --env ci --body "${AWS_REGION}"
+gh secret set AWS_ROLE --env ci --body "${CI_ROLE_ARN}"
 ```

@@ -6,32 +6,31 @@ export class CIStack extends Stack {
 		parent: App,
 		{
 			repository: r,
+			gitHubOICDProviderArn,
 		}: {
 			repository: {
 				owner: string
 				repo: string
 			}
+			gitHubOICDProviderArn: string
 		},
 	) {
 		super(parent, CI_STACK_NAME)
 
-		const githubDomain = 'token.actions.githubusercontent.com'
-		const ghProvider = new IAM.OpenIdConnectProvider(this, 'githubProvider', {
-			url: `https://${githubDomain}`,
-			clientIds: ['sts.amazonaws.com'],
-			thumbprints: ['6938fd4d98bab03faadb97b34396831e3780aea1'],
-		})
+		const gitHubOIDC = IAM.OpenIdConnectProvider.fromOpenIdConnectProviderArn(
+			this,
+			'gitHubOICDProvider',
+			gitHubOICDProviderArn,
+		)
 
 		const ghRole = new IAM.Role(this, 'ghRole', {
 			roleName: `${CI_STACK_NAME}-github-actions`,
 			assumedBy: new IAM.WebIdentityPrincipal(
-				ghProvider.openIdConnectProviderArn,
+				gitHubOIDC.openIdConnectProviderArn,
 				{
 					StringEquals: {
 						'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
-					},
-					StringLike: {
-						[`${githubDomain}:sub`]: `repo:${r.owner}/${r.repo}:ref:refs/heads/*`,
+						'token.actions.githubusercontent.com:sub': `repo:${r.owner}/${r.repo}:environment:ci`,
 					},
 				},
 			),

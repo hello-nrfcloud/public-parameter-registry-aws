@@ -10,6 +10,7 @@ import {
 	aws_s3 as S3,
 	Stack,
 } from 'aws-cdk-lib'
+import { CD } from './CD.js'
 import type { RegistryLambdas } from './RegistryLambdas.js'
 import { STACK_NAME } from './stackConfig.js'
 
@@ -18,8 +19,12 @@ export class RegistryStack extends Stack {
 		parent: App,
 		{
 			lambdaSources,
+			repository,
+			gitHubOICDProviderArn,
 		}: {
 			lambdaSources: RegistryLambdas
+			repository: Repository
+			gitHubOICDProviderArn: string
 		},
 	) {
 		super(parent, STACK_NAME)
@@ -77,6 +82,20 @@ export class RegistryStack extends Stack {
 		publishToS3.addPermission('publishToS3InvokePermission', {
 			principal: new IAM.ServicePrincipal('events.amazonaws.com'),
 			sourceArn: publishToS3Rule.ruleArn,
+		})
+
+		// Set up role for CD
+		const gitHubOIDC = IAM.OpenIdConnectProvider.fromOpenIdConnectProviderArn(
+			this,
+			'gitHubOICDProvider',
+			gitHubOICDProviderArn,
+		)
+		const cd = new CD(this, { repository, gitHubOIDC })
+
+		new CfnOutput(this, 'cdRoleArn', {
+			exportName: `${this.stackName}:cdRoleArn`,
+			description: 'Role to use in GitHub Actions',
+			value: cd.role.roleArn,
 		})
 
 		new CfnOutput(this, 'registryEndpoint', {

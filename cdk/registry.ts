@@ -1,7 +1,18 @@
+import { IAMClient } from '@aws-sdk/client-iam'
 import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
+import pJSON from '../package.json'
 import { RegistryApp } from './RegistryApp.js'
+import { ensureGitHubOIDCProvider } from './ensureGitHubOIDCProvider.js'
 import { packLambda } from './packLambda.js'
+
+const repoUrl = new URL(pJSON.repository.url)
+const repository = {
+	owner: repoUrl.pathname.split('/')[1] ?? 'bifravst',
+	repo:
+		repoUrl.pathname.split('/')[2]?.replace(/\.git$/, '') ??
+		'public-parameter-registry-aws-js',
+}
 
 export type PackedLambda = { lambdaZipFile: string; handler: string }
 
@@ -28,4 +39,8 @@ new RegistryApp({
 	lambdaSources: {
 		publishToS3: await pack('publishToS3'),
 	},
+	repository,
+	gitHubOICDProviderArn: await ensureGitHubOIDCProvider({
+		iam: new IAMClient({}),
+	}),
 })

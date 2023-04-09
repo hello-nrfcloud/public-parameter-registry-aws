@@ -1,0 +1,64 @@
+name: Continuous Deploy solution
+
+on:
+  push:
+    branches:
+      - saga
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+  issues: write
+
+env:
+  CI: 1
+  FORCE_COLOR: 3
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    timeout-minutes: 10
+
+    environment:
+      name: production
+      url: ${{ steps.endpoint.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Keep npm cache around to speed up installs
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: build-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Check TypeScript
+        run: npx tsc
+
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: github-action-public-parameter-registry-cd
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy solution stack
+        run: npx cdk deploy
+
+      - name: Get endpoint URL
+        id: endpoint
+        run: |
+          ENDPOINT=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry} | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "registryEndpoint") | .OutputValue' | sed -E 's/\/$//g'`
+          echo "url=${ENDPOINT}" >> $GITHUB_OUTPUT

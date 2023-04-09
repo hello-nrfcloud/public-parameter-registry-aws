@@ -3,11 +3,21 @@ import type { RegistryLambdas } from './RegistryLambdas.js'
 import { RegistryStack } from './RegistryStack.js'
 
 export class RegistryApp extends App {
-	public constructor({ lambdaSources }: { lambdaSources: RegistryLambdas }) {
+	public constructor({
+		lambdaSources,
+		repository,
+		gitHubOICDProviderArn,
+	}: {
+		lambdaSources: RegistryLambdas
+		repository: Repository
+		gitHubOICDProviderArn: string
+	}) {
 		super()
 
 		new RegistryStack(this, {
 			lambdaSources,
+			repository,
+			gitHubOICDProviderArn,
 		})
 	}
 }

@@ -1,5 +1,7 @@
+import { IAMClient } from '@aws-sdk/client-iam'
 import pJSON from '../package.json'
 import { CIApp } from './CIApp.js'
+import { ensureGitHubOIDCProvider } from './ensureGitHubOIDCProvider'
 
 const repoUrl = new URL(pJSON.repository.url)
 const repository = {
@@ -8,4 +10,9 @@ const repository = {
 		repoUrl.pathname.split('/')[2]?.replace(/\.git$/, '') ??
 		'public-parameter-registry-aws-js',
 }
-new CIApp({ repository })
+new CIApp({
+	repository,
+	gitHubOICDProviderArn: await ensureGitHubOIDCProvider({
+		iam: new IAMClient({}),
+	}),
+})
