@@ -59,7 +59,7 @@ jobs:
         run: echo "STACK_NAME=${{ vars.STACK_NAME }}" >> $GITHUB_ENV
 
       - name: Deploy solution stack
-        run: npx cdk deploy
+        run: npx cdk deploy --require-approval never
 
       - name: Get endpoint URL
         id: endpoint
