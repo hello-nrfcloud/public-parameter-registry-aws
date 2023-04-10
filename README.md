@@ -67,6 +67,12 @@ gh variable set AWS_REGION --env production --body "${AWS_REGION}"
 gh secret set AWS_ROLE --env production --body "${CD_ROLE_ARN}"
 ```
 
+Optionally, configure the stack name to use a suitable name for your project:
+
+```bash
+gh variable set STACK_NAME --env production --body "my-project-registry"
+```
+
 ## CI with GitHub Actions
 
 Configure the AWS credentials for an account used for CI, then run

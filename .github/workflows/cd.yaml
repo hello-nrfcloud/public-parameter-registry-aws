@@ -54,6 +54,10 @@ jobs:
           role-session-name: github-action-public-parameter-registry-cd
           aws-region: ${{ vars.AWS_REGION }}
 
+      - name: Set stack name
+        if: vars.STACK_NAME != ''
+        run: echo "STACK_NAME=${{ vars.STACK_NAME }}" >> $GITHUB_ENV
+
       - name: Deploy solution stack
         run: npx cdk deploy
 
