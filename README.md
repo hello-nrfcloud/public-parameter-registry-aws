@@ -39,6 +39,8 @@ npm ci
 ### Deploy
 
 ```bash
+# Optionally, configure the stack name to use a suitable name for your project:
+export STACK_NAME="my-project-registry"
 npx cdk deploy
 ```
 
@@ -65,12 +67,8 @@ Store the role name from the output as a GitHub Action secret:
 CD_ROLE_ARN=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry} | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "cdRoleArn") | .OutputValue' | sed -E 's/\/$//g'`
 gh variable set AWS_REGION --env production --body "${AWS_REGION}"
 gh secret set AWS_ROLE --env production --body "${CD_ROLE_ARN}"
-```
-
-Optionally, configure the stack name to use a suitable name for your project:
-
-```bash
-gh variable set STACK_NAME --env production --body "my-project-registry"
+# If you've used a custom stack name
+gh variable set STACK_NAME --env production --body "${STACK_NAME}"
 ```
 
 ## CI with GitHub Actions
