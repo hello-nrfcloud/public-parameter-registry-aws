@@ -7,12 +7,18 @@ export class RegistryApp extends App {
 		lambdaSources,
 		repository,
 		gitHubOICDProviderArn,
+		version,
 	}: {
 		lambdaSources: RegistryLambdas
 		repository: Repository
 		gitHubOICDProviderArn: string
+		version: string
 	}) {
-		super()
+		super({
+			context: {
+				version,
+			},
+		})
 
 		new RegistryStack(this, {
 			lambdaSources,

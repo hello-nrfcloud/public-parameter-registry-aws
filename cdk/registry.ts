@@ -13,6 +13,7 @@ const repository = {
 		repoUrl.pathname.split('/')[2]?.replace(/\.git$/, '') ??
 		'public-parameter-registry-aws-js',
 }
+const version = process.env.VERSION ?? pJSON.version
 
 export type PackedLambda = { lambdaZipFile: string; handler: string }
 
@@ -43,4 +44,5 @@ new RegistryApp({
 	gitHubOICDProviderArn: await ensureGitHubOIDCProvider({
 		iam: new IAMClient({}),
 	}),
+	version,
 })
