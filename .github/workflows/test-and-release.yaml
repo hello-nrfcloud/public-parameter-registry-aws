@@ -63,9 +63,16 @@ jobs:
 
       - name: Semantic release
         if: github.ref == 'refs/heads/saga'
+        id: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
+
+      - name: Trigger release workflow
+        if: steps.semantic-release.outcome == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.CD_TOKEN }}
+        run: gh workflow run cd.yml
 
       - name: Clean up End-to-End test resources
         if: always()
