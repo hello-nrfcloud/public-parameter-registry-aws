@@ -72,7 +72,7 @@ jobs:
         if: steps.semantic-release.outcome == 'success'
         env:
           GITHUB_TOKEN: ${{ secrets.CD_TOKEN }}
-        run: gh workflow run cd.yml
+        run: gh workflow run cd.yaml
 
       - name: Clean up End-to-End test resources
         if: always()
