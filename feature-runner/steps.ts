@@ -57,7 +57,7 @@ export const steps = ({
 					)
 				if (match === null) return noMatch
 				const res = await fetch(match?.groups?.url ?? '')
-				res.headers.forEach((v, k) => debug(`${v}: ${k}`))
+				res.headers.forEach((v, k) => debug(`${k}: ${v}`))
 				const body = await res.text()
 				debug(body)
 				let registry: Record<string, any> = {}

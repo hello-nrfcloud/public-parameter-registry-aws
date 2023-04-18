@@ -1,6 +1,7 @@
 import {
 	App,
 	CfnOutput,
+	aws_cloudfront as CloudFront,
 	Duration,
 	aws_events as Events,
 	aws_events_targets as EventsTargets,
@@ -42,6 +43,47 @@ export class RegistryStack extends Stack {
 			],
 		})
 
+		const distribution = new CloudFront.CfnDistribution(
+			this,
+			'websiteDistribution',
+			{
+				distributionConfig: {
+					enabled: true,
+					priceClass: 'PriceClass_100',
+					defaultRootObject: 'registry.json',
+					defaultCacheBehavior: {
+						allowedMethods: ['HEAD', 'GET', 'OPTIONS'],
+						cachedMethods: ['HEAD', 'GET'],
+						compress: true,
+						forwardedValues: {
+							queryString: true,
+							headers: [
+								'Access-Control-Request-Headers',
+								'Access-Control-Request-Method',
+								'Origin',
+							],
+						},
+						smoothStreaming: false,
+						targetOriginId: 'S3',
+						viewerProtocolPolicy: 'redirect-to-https',
+					},
+					ipv6Enabled: true,
+					viewerCertificate: {
+						cloudFrontDefaultCertificate: true,
+					},
+					origins: [
+						{
+							domainName: `${bucket.bucketName}.s3-website.${this.region}.amazonaws.com`,
+							id: 'S3',
+							customOriginConfig: {
+								originProtocolPolicy: 'http-only',
+							},
+						},
+					],
+				},
+			},
+		)
+
 		const publishToS3 = new Lambda.Function(this, 'publishToS3', {
 			handler: lambdaSources.publishToS3.handler,
 			architecture: Lambda.Architecture.ARM_64,
@@ -54,6 +96,7 @@ export class RegistryStack extends Stack {
 				VERSION: this.node.tryGetContext('version'),
 				STACK_NAME: STACK_NAME,
 				BUCKET_NAME: bucket.bucketName,
+				CLOUDFRONT_DISTRIBUTION_ID: distribution.attrId,
 			},
 			logRetention: Logs.RetentionDays.ONE_WEEK,
 			initialPolicy: [
@@ -61,6 +104,12 @@ export class RegistryStack extends Stack {
 					actions: ['ssm:GetParametersByPath'],
 					resources: [
 						`arn:aws:ssm:${this.region}:${this.account}:parameter/${STACK_NAME}/public`,
+					],
+				}),
+				new IAM.PolicyStatement({
+					actions: ['cloudfront:CreateInvalidation'],
+					resources: [
+						`arn:aws:cloudfront::${this.account}:distribution/${distribution.attrId}`,
 					],
 				}),
 			],
@@ -101,7 +150,7 @@ export class RegistryStack extends Stack {
 		new CfnOutput(this, 'registryEndpoint', {
 			exportName: `${this.stackName}:registryEndpoint`,
 			description: 'Endpoint used for fetch the parameters',
-			value: bucket.bucketWebsiteUrl,
+			value: `https://${distribution.attrDomainName}`,
 		})
 	}
 }

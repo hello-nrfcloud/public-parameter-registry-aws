@@ -1,3 +1,7 @@
+import {
+	CloudFrontClient,
+	CreateInvalidationCommand,
+} from '@aws-sdk/client-cloudfront'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { SSMClient } from '@aws-sdk/client-ssm'
 import { getSettings } from './settings.js'
@@ -5,9 +9,12 @@ import { getSettings } from './settings.js'
 const stackName = process.env.STACK_NAME ?? ''
 const prefix = `/${stackName}/public/`
 const bucketName = process.env.BUCKET_NAME ?? ''
+const version = process.env.VERSION ?? ''
+const DistributionId = process.env.CLOUDFRONT_DISTRIBUTION_ID ?? ''
 
 const ssm = new SSMClient({})
 const s3 = new S3Client({})
+const cf = new CloudFrontClient({})
 
 export const handler = async (event: {
 	version: string // '0'
@@ -41,13 +48,30 @@ export const handler = async (event: {
 	}
 	console.log(JSON.stringify({ json }, null, 2))
 
-	await s3.send(
-		new PutObjectCommand({
-			Bucket: bucketName,
-			Key: 'registry.json',
-			Body: JSON.stringify(json, null, 2),
-			CacheControl: 'public,max-age=600',
-			ContentType: 'application/json',
-		}),
-	)
+	await Promise.all([
+		s3.send(
+			new PutObjectCommand({
+				Bucket: bucketName,
+				Key: 'registry.json',
+				Body: JSON.stringify(json, null, 2),
+				CacheControl: 'public,max-age=600',
+				ContentType: 'application/json',
+				Metadata: {
+					'X-Backend-Version': version,
+				},
+			}),
+		),
+		cf.send(
+			new CreateInvalidationCommand({
+				DistributionId,
+				InvalidationBatch: {
+					CallerReference: event.id,
+					Paths: {
+						Quantity: 2,
+						Items: ['/', '/registry.json'],
+					},
+				},
+			}),
+		),
+	])
 }
