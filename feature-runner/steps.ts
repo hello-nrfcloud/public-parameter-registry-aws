@@ -1,3 +1,4 @@
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import {
 	DeleteParameterCommand,
 	DeleteParametersCommand,
@@ -30,17 +31,13 @@ export const steps = ({
 					step: { debug },
 				},
 			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
-				const match =
-					/^a random (?<type>string|number) in `(?<storageName>[^`]+)` is stored in `(?<name>[^`]+)`$/.exec(
-						step.title,
-					)
+				const match = /^`(?<value>[^`]+)` is stored in `(?<name>[^`]+)`$/.exec(
+					step.title,
+				)
 				if (match === null) return noMatch
 				const Name = `/${context.stackName}/public/${match.groups?.name}`
-				const value =
-					match.groups?.type === 'string'
-						? randomUUID()
-						: Math.floor(Math.random() * 1000000)
-				debug(Name)
+				const value = match.groups?.value ?? ''
+				debug(`${Name}: ${value}`)
 				await ssm.send(
 					new PutParameterCommand({
 						Name,
@@ -50,6 +47,23 @@ export const steps = ({
 					}),
 				)
 				Names.push(Name)
+			},
+			async ({
+				step,
+				context,
+				log: {
+					step: { debug },
+				},
+			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
+				const match =
+					/^a random (?<type>string|number) is stored in `(?<storageName>[^`]+)`$/.exec(
+						step.title,
+					)
+				if (match === null) return noMatch
+				const value =
+					match.groups?.type === 'string'
+						? randomUUID()
+						: Math.floor(Math.random() * 1000000)
 				context[match.groups?.storageName ?? ''] = value
 			},
 			async ({
@@ -103,12 +117,18 @@ export const steps = ({
 				},
 			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
 				const match =
-					/^the result of GET `(?<url>[^`]+)` should not have property `(?<property>[^`]+)`$/.exec(
+					/^the S3 file `(?<s3Url>[^`]+)` should not have property `(?<property>[^`]+)`$/.exec(
 						step.title,
 					)
 				if (match === null) return noMatch
-				const res = await fetch(match?.groups?.url ?? '')
-				const body = await res.text()
+				const [bucket, file] = (match.groups?.s3Url ?? '').split('/')
+				const res = await new S3Client({}).send(
+					new GetObjectCommand({
+						Bucket: bucket,
+						Key: file,
+					}),
+				)
+				const body = (await res.Body?.transformToString()) ?? ''
 				debug(body)
 				let registry: Record<string, any> = {}
 				try {

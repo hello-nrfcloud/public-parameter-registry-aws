@@ -15,6 +15,7 @@ const config = await stackOutput(new CloudFormationClient({}))<StackOutputs>(
 export type World = {
 	registryEndpoint: string
 	stackName: string
+	bucketName: string
 } & Record<string, any>
 
 const print = (arg: unknown) =>
@@ -52,6 +53,7 @@ runner.addStepRunners(...stepDefs.steps)
 
 const res = await runner.run({
 	registryEndpoint: config.registryEndpoint,
+	bucketName: config.bucketName,
 	stackName: STACK_NAME,
 })
 

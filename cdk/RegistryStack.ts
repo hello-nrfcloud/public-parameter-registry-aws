@@ -152,9 +152,17 @@ export class RegistryStack extends Stack {
 			description: 'Endpoint used for fetch the parameters',
 			value: `https://${distribution.attrDomainName}`,
 		})
+
+		new CfnOutput(this, 'bucketName', {
+			exportName: `${this.stackName}:bucketName`,
+			description: 'Name of the S3 bucket',
+			value: bucket.bucketName,
+		})
 	}
 }
 
 export type StackOutputs = {
 	registryEndpoint: string
+	bucketName: string
+	cdRoleArn: string
 }
