@@ -11,8 +11,11 @@ needs:
 
 ## Background
 
-Given `example/aNumberParameter` is deleted
+Given `${aRandomKey}/aNumberParameter` is deleted
 
 ## Get the parameters
 
-Soon the result of GET `${registryEndpoint}` should not have property `example`
+<!-- S3 file is accessed here directly to circumvent CLoudFront caching. -->
+
+Soon the S3 file `${bucketName}/registry.json` should not have property
+`${aRandomKey}`

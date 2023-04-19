@@ -9,9 +9,17 @@ retry:
 
 ## Background
 
-Given a random string in `randomString` is stored in `aStringParameter`
+Given a random string is stored in `randomString`
 
-And a random number in `randomNumber` is stored in `example/aNumberParameter`
+Given a random string is stored in `aRandomKey`
+
+Given a random number is stored in `randomNumber`
+
+## Store the parameters
+
+Given `${randomString}` is stored in `aStringParameter`
+
+Given `${randomNumber}` is stored in `${aRandomKey}/aNumberParameter`
 
 ## Get the parameters
 
@@ -20,7 +28,7 @@ Soon the result of GET `${registryEndpoint}` should match this JSON
 ```json
 {
   "aStringParameter": "${randomString}",
-  "example": {
+  "${aRandomKey}": {
     "aNumberParameter": ${randomNumber}
   }
 }
