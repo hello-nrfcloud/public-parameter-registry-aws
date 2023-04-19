@@ -122,7 +122,7 @@ export class RegistryStack extends Stack {
 				source: ['aws.ssm'],
 				detailType: ['Parameter Store Change'],
 				detail: {
-					operation: ['Create', 'Update'],
+					operation: ['Create', 'Update', 'Delete'],
 				},
 			},
 			targets: [new EventsTargets.LambdaFunction(publishToS3)],

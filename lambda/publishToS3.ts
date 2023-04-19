@@ -28,7 +28,7 @@ export const handler = async (event: {
 	detail: {
 		name: string // '/public-parameter-registry/public/some-parameter'
 		type: string // 'String'
-		operation: string // 'Create', 'Update
+		operation: string // 'Create', 'Update', 'Delete'
 	}
 }): Promise<void> => {
 	console.log(JSON.stringify({ event }))

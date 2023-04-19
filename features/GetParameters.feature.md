@@ -9,9 +9,9 @@ retry:
 
 ## Background
 
-Given `${randomString}` is stored in `aStringParameter`
+Given a random string in `randomString` is stored in `aStringParameter`
 
-And `${randomNumber}` is stored in `example/aNumberParameter`
+And a random number in `randomNumber` is stored in `example/aNumberParameter`
 
 ## Get the parameters
 
