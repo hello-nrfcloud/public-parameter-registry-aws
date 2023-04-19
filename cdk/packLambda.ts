@@ -2,7 +2,7 @@ import swc from '@swc/core'
 import { createWriteStream } from 'node:fs'
 import { parse } from 'path'
 import * as yazl from 'yazl'
-import { findDependencies } from './findDependencies'
+import { findDependencies } from './findDependencies.js'
 
 /**
  * In the bundle we only include code that's not in the layer.

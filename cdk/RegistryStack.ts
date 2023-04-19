@@ -94,7 +94,7 @@ export class RegistryStack extends Stack {
 			description: 'Update parameter export on S3 when parameters change',
 			environment: {
 				VERSION: this.node.tryGetContext('version'),
-				STACK_NAME: STACK_NAME,
+				STACK_NAME,
 				BUCKET_NAME: bucket.bucketName,
 				CLOUDFRONT_DISTRIBUTION_ID: distribution.attrId,
 			},

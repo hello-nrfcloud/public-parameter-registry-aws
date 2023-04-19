@@ -12,7 +12,7 @@ import {
 	type StepRunnerArgs,
 } from '@nordicsemiconductor/bdd-markdown'
 import { check, objectMatching } from 'tsmatchers'
-import { type World } from './run-features'
+import { type World } from './run-features.js'
 
 export const steps = ({
 	ssm,
