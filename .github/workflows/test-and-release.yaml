@@ -61,8 +61,8 @@ jobs:
 
       - name: Run End-to-End Tests
         run: |
-          npm config set script-shell `which bash`
-          npm run test:e2e
+          set -o pipefail
+          npx tsx ./feature-runner/run-features.ts | npx tsx ./feature-runner/console-reporter.ts
 
       - name: Semantic release
         if: github.ref == 'refs/heads/saga'
