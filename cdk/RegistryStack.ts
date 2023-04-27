@@ -41,6 +41,13 @@ export class RegistryStack extends Stack {
 					exposedHeaders: ['Content-Type'],
 				},
 			],
+			blockPublicAccess: {
+				blockPublicAcls: false,
+				ignorePublicAcls: false,
+				restrictPublicBuckets: false,
+				blockPublicPolicy: false,
+			},
+			objectOwnership: S3.ObjectOwnership.OBJECT_WRITER,
 		})
 
 		const distribution = new CloudFront.CfnDistribution(
