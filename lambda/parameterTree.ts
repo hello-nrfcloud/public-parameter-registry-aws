@@ -11,12 +11,15 @@ export const parameterTree = (
 			...param,
 			Name: param.Name?.replace(prefixWithSlash, '') ?? '',
 		}))
-		.reduce((tree, { Name, Value }) => {
-			if (Value === undefined) return tree
-			const parts: string[] = Name?.split('/') ?? []
-			setRecursive(tree, parts, parseValue(Value))
-			return tree
-		}, {} as Record<string, any>)
+		.reduce(
+			(tree, { Name, Value }) => {
+				if (Value === undefined) return tree
+				const parts: string[] = Name?.split('/') ?? []
+				setRecursive(tree, parts, parseValue(Value))
+				return tree
+			},
+			{} as Record<string, any>,
+		)
 }
 const parseValue = (v: string): string | number =>
 	/^[0-9]+(\.[0-9]+)?$/.test(v) ? parseFloat(v) : v
