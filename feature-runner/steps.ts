@@ -51,9 +51,6 @@ export const steps = ({
 			async ({
 				step,
 				context,
-				log: {
-					step: { debug },
-				},
 			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
 				const match =
 					/^a random (?<type>string|number) is stored in `(?<storageName>[^`]+)`$/.exec(
