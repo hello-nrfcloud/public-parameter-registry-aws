@@ -9,3 +9,4 @@ cdk.out/
 dist/
 .envrc
 certificates/
+test_suite_analysis/
