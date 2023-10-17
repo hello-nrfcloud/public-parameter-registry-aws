@@ -5,7 +5,7 @@ import { ensureGitHubOIDCProvider } from './ensureGitHubOIDCProvider.js'
 
 const repoUrl = new URL(pJSON.repository.url)
 const repository = {
-	owner: repoUrl.pathname.split('/')[1] ?? 'bifravst',
+	owner: repoUrl.pathname.split('/')[1] ?? 'hello-nrfcloud',
 	repo:
 		repoUrl.pathname.split('/')[2]?.replace(/\.git$/, '') ??
 		'public-parameter-registry-aws-js',

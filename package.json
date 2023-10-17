@@ -10,12 +10,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bifravst/public-parameter-registry-aws-js.git"
+    "url": "git+https://github.com/hello-nrfcloud/public-parameter-registry-aws-js.git"
   },
   "bugs": {
-    "url": "https://github.com/bifravst/public-parameter-registry-aws-js/issues"
+    "url": "https://github.com/hello-nrfcloud/public-parameter-registry-aws-js/issues"
   },
-  "homepage": "https://github.com/bifravst/public-parameter-registry-aws-js#readme",
+  "homepage": "https://github.com/hello-nrfcloud/public-parameter-registry-aws-js#readme",
   "keywords": [
     "nordicsemiconductor",
     "cellular-iot",
