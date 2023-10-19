@@ -1,8 +1,10 @@
 import { parameterTree } from './parameterTree.js'
+import { describe, test as it } from 'node:test'
+import assert from 'node:assert'
 
-describe('parameterTree()', () => {
-	it('should create a tree structure from the given SSM paremeters', () =>
-		expect(
+void describe('parameterTree()', () => {
+	void it('should create a tree structure from the given SSM parameters', () =>
+		assert.deepStrictEqual(
 			parameterTree(
 				[
 					{
@@ -35,11 +37,12 @@ describe('parameterTree()', () => {
 				],
 				'/public-parameter-registry/public',
 			),
-		).toMatchObject({
-			aStringParameter: 'someValue',
-			['some-parameter']: 'Some Value 2',
-			example: {
-				aNumberParameter: 42,
+			{
+				aStringParameter: 'someValue',
+				['some-parameter']: 'Some Value 2',
+				example: {
+					aNumberParameter: 42,
+				},
 			},
-		}))
+		))
 })
