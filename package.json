@@ -54,7 +54,7 @@
     "husky": "8.0.3",
     "prettier": "3.1.0",
     "tsmatchers": "5.0.1",
-    "tsx": "4.1.1",
+    "tsx": "4.1.2",
     "typescript": "5.2.2",
     "yazl": "2.5.1"
   },
