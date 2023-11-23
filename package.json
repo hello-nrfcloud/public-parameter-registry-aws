@@ -25,7 +25,7 @@
   "author": "Nordic Semiconductor ASA | nordicsemi.no",
   "license": "BSD-3-Clause",
   "devDependencies": {
-    "@aws-sdk/client-cloudfront": "3.456.0",
+    "@aws-sdk/client-cloudfront": "3.457.0",
     "@aws-sdk/client-iam": "3.454.0",
     "@aws-sdk/client-s3": "3.456.0",
     "@aws-sdk/client-ssm": "3.454.0",
