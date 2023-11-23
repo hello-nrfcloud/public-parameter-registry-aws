@@ -72,7 +72,7 @@
     "npm": ">=9"
   },
   "volta": {
-    "node": "20.9.0"
+    "node": "20.10.0"
   },
   "release": {
     "branches": [
