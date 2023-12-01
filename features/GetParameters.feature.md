@@ -1,6 +1,11 @@
 ---
 retry:
   initialDelay: 5000
+exampleContext:
+  aRandomKey: 33ec3829-895f-4265-a11f-6c617a2e6b87
+  randomNumber: 42
+  randomString: some-value
+  registryEndpoint: https://abc.cloudfront.net
 ---
 
 # Get Parameters

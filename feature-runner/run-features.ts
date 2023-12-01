@@ -27,22 +27,22 @@ const runner = await runFolder<World>({
 	logObserver: {
 		onDebug: (info, ...args) =>
 			console.error(
-				chalk.magenta(info.context.keyword),
+				chalk.magenta(info.step.keyword),
 				...args.map((arg) => chalk.cyan(print(arg))),
 			),
 		onError: (info, ...args) =>
 			console.error(
-				chalk.magenta(info.context.keyword),
+				chalk.magenta(info.step.keyword),
 				...args.map((arg) => chalk.red(print(arg))),
 			),
 		onInfo: (info, ...args) =>
 			console.error(
-				chalk.magenta(info.context.keyword),
+				chalk.magenta(info.step.keyword),
 				...args.map((arg) => chalk.green(print(arg))),
 			),
 		onProgress: (info, ...args) =>
 			console.error(
-				chalk.magenta(info.context.keyword),
+				chalk.magenta(info.step.keyword),
 				...args.map((arg) => chalk.yellow(print(arg))),
 			),
 	},

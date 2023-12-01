@@ -8,14 +8,15 @@ import {
 } from '@aws-sdk/client-ssm'
 import {
 	codeBlockOrThrow,
-	noMatch,
-	type StepRunResult,
 	type StepRunner,
-	type StepRunnerArgs,
+	regExpMatchedStep,
 } from '@nordicsemiconductor/bdd-markdown'
 import { randomUUID } from 'node:crypto'
 import { check, not, objectMatching, objectWithKeys } from 'tsmatchers'
 import { type World } from './run-features.js'
+import { Type } from '@sinclair/typebox'
+import pRetry from 'p-retry'
+
 export const steps = ({
 	ssm,
 }: {
@@ -24,118 +25,133 @@ export const steps = ({
 	let Names: string[] = []
 	return {
 		steps: [
-			async ({
-				step,
-				context,
-				log: {
-					step: { debug },
-				},
-			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
-				const match = /^`(?<value>[^`]+)` is stored in `(?<name>[^`]+)`$/.exec(
-					step.title,
-				)
-				if (match === null) return noMatch
-				const Name = `/${context.stackName}/public/${match.groups?.name}`
-				const value = match.groups?.value ?? ''
-				debug(`${Name}: ${value}`)
-				await ssm.send(
-					new PutParameterCommand({
-						Name,
-						Value: `${value}`,
-						Type: ParameterType.STRING,
-						Overwrite: true,
+			regExpMatchedStep(
+				{
+					regExp: /^`(?<value>[^`]+)` is stored in `(?<name>[^`]+)`$/,
+					schema: Type.Object({
+						value: Type.String({ minLength: 1 }),
+						name: Type.String({ minLength: 1 }),
 					}),
-				)
-				Names.push(Name)
-			},
-			async ({
-				step,
-				context,
-			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
-				const match =
-					/^a random (?<type>string|number) is stored in `(?<storageName>[^`]+)`$/.exec(
-						step.title,
-					)
-				if (match === null) return noMatch
-				const value =
-					match.groups?.type === 'string'
-						? randomUUID()
-						: Math.floor(Math.random() * 1000000)
-				context[match.groups?.storageName ?? ''] = value
-			},
-			async ({
-				step,
-				context,
-				log: {
-					step: { debug },
 				},
-			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
-				const match = /^`(?<name>[^`]+)` is deleted$/.exec(step.title)
-				if (match === null) return noMatch
-				const Name = `/${context.stackName}/public/${match.groups?.name}`
-				debug(Name)
-				await ssm.send(
-					new DeleteParameterCommand({
-						Name,
+				async ({ context, log: { debug }, match: { name, value } }) => {
+					const Name = `/${context.stackName}/public/${name}`
+					debug(`${Name}: ${value}`)
+					await ssm.send(
+						new PutParameterCommand({
+							Name,
+							Value: `${value}`,
+							Type: ParameterType.STRING,
+							Overwrite: true,
+						}),
+					)
+					Names.push(Name)
+				},
+			),
+			regExpMatchedStep(
+				{
+					regExp:
+						/^a random (?<type>string|number) is stored in `(?<storageName>[^`]+)`$/,
+					schema: Type.Object({
+						type: Type.Union([Type.Literal('string'), Type.Literal('number')]),
+						storageName: Type.String({ minLength: 1 }),
 					}),
-				)
-				Names = Names.filter((n) => n !== Name)
-			},
-			async ({
-				step,
-				log: {
-					step: { debug },
 				},
-			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
-				const match =
-					/^the result of GET `(?<url>[^`]+)` should match this JSON$/.exec(
-						step.title,
-					)
-				if (match === null) return noMatch
-				const res = await fetch(match?.groups?.url ?? '')
-				res.headers.forEach((v, k) => debug(`${k}: ${v}`))
-				const body = await res.text()
-				debug(body)
-				let registry: Record<string, any> = {}
-				try {
-					registry = JSON.parse(body)
-				} catch {
-					throw new Error(`Failed to parse body as JSON: ${body}`)
-				}
-				check(registry).is(
-					objectMatching(JSON.parse(codeBlockOrThrow(step).code)),
-				)
-				return registry
-			},
-			async ({
-				step,
-				log: {
-					step: { debug },
+				async ({ match: { type, storageName }, context }) => {
+					const value =
+						type === 'string'
+							? randomUUID()
+							: Math.floor(Math.random() * 1000000)
+					context[storageName ?? ''] = value
 				},
-			}: StepRunnerArgs<World>): Promise<StepRunResult> => {
-				const match =
-					/^the S3 file `(?<s3Url>[^`]+)` should not have property `(?<property>[^`]+)`$/.exec(
-						step.title,
-					)
-				if (match === null) return noMatch
-				const [bucket, file] = (match.groups?.s3Url ?? '').split('/')
-				const res = await new S3Client({}).send(
-					new GetObjectCommand({
-						Bucket: bucket,
-						Key: file,
+			),
+			regExpMatchedStep(
+				{
+					regExp: /^`(?<name>[^`]+)` is deleted$/,
+					schema: Type.Object({
+						name: Type.String({ minLength: 1 }),
 					}),
-				)
-				const body = (await res.Body?.transformToString()) ?? ''
-				debug(body)
-				let registry: Record<string, any> = {}
-				try {
-					registry = JSON.parse(body)
-				} catch {
-					throw new Error(`Failed to parse body as JSON: ${body}`)
-				}
-				check(registry).is(not(objectWithKeys(match.groups?.property ?? '')))
-				return registry
-			},
+				},
+				async ({ match: { name }, context, log: { debug } }) => {
+					const Name = `/${context.stackName}/public/${name}`
+					debug(Name)
+					await ssm.send(
+						new DeleteParameterCommand({
+							Name,
+						}),
+					)
+					Names = Names.filter((n) => n !== Name)
+				},
+			),
+			regExpMatchedStep(
+				{
+					regExp: /^the result of GET `(?<url>[^`]+)` should match this JSON$/,
+					schema: Type.Object({
+						url: Type.String({ minLength: 1 }),
+					}),
+				},
+				async ({ match: { url }, step, log: { debug } }) => {
+					await pRetry(
+						async () => {
+							const res = await fetch(url ?? '')
+							check(res.ok).is(true)
+							res.headers.forEach((v, k) => debug(`${k}: ${v}`))
+							const body = await res.text()
+							debug(body)
+							let result: Record<string, any> = {}
+							try {
+								result = JSON.parse(body)
+							} catch {
+								throw new Error(`Failed to parse body as JSON: ${body}`)
+							}
+							check(result).is(
+								objectMatching(JSON.parse(codeBlockOrThrow(step).code)),
+							)
+						},
+						{
+							retries: 5,
+							minTimeout: 5000,
+							factor: 1.5,
+						},
+					)
+				},
+			),
+			regExpMatchedStep(
+				{
+					regExp:
+						/^the S3 file `(?<s3Url>[^`]+)` should not have property `(?<property>[^`]+)`$/,
+					schema: Type.Object({
+						s3Url: Type.String({ minLength: 1 }),
+						property: Type.String({ minLength: 1 }),
+					}),
+				},
+				async ({ match: { s3Url, property }, log: { debug } }) => {
+					await pRetry(
+						async () => {
+							const [bucket, file] = (s3Url ?? '').split('/')
+							const res = await new S3Client({}).send(
+								new GetObjectCommand({
+									Bucket: bucket,
+									Key: file,
+								}),
+							)
+							const body = (await res.Body?.transformToString()) ?? ''
+							debug(body)
+							let result: Record<string, any> = {}
+							try {
+								result = JSON.parse(body)
+							} catch {
+								throw new Error(`Failed to parse body as JSON: ${body}`)
+							}
+							check(result).is(not(objectWithKeys(property ?? '')))
+						},
+						{
+							retries: 5,
+							minTimeout: 5000,
+							factor: 1.5,
+						},
+					)
+				},
+			),
 		],
 		cleanup: async () => {
 			if (Names.length === 0) return
