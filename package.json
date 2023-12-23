@@ -31,7 +31,7 @@
     "@aws-sdk/client-ssm": "3.478.0",
     "@commitlint/config-conventional": "18.4.3",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "13.1.5",
-    "@nordicsemiconductor/bdd-markdown": "7.0.16",
+    "@nordicsemiconductor/bdd-markdown": "7.0.17",
     "@nordicsemiconductor/cloudformation-helpers": "9.0.2",
     "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "17.0.0",
     "@swc/cli": "0.1.63",
