@@ -26,8 +26,8 @@
   "license": "BSD-3-Clause",
   "devDependencies": {
     "@aws-sdk/client-cloudfront": "3.496.0",
-    "@aws-sdk/client-iam": "3.496.0",
-    "@aws-sdk/client-s3": "3.496.0",
+    "@aws-sdk/client-iam": "3.498.0",
+    "@aws-sdk/client-s3": "3.498.0",
     "@aws-sdk/client-ssm": "3.496.0",
     "@commitlint/config-conventional": "18.5.0",
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "13.1.11",
