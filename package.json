@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tsx --no-warnings --test ./lambda/*.spec.ts",
     "test:e2e": "$(set -o pipefail && npx tsx ./feature-runner/run-features.ts | npx tsx ./feature-runner/console-reporter.ts)",
-    "prepare": "husky install && check-node-version --package"
+    "prepare": "husky && check-node-version --package"
   },
   "repository": {
     "type": "git",
@@ -51,7 +51,7 @@
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-unicorn": "50.0.1",
     "glob": "10.3.10",
-    "husky": "8.0.3",
+    "husky": "9.0.6",
     "p-retry": "6.2.0",
     "prettier": "3.2.4",
     "tsmatchers": "5.0.2",
