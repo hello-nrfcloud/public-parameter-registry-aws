@@ -70,26 +70,3 @@ gh secret set AWS_ROLE --env production --body "${CD_ROLE_ARN}"
 # If you've used a custom stack name
 gh variable set STACK_NAME --env production --body "${STACK_NAME}"
 ```
-
-## CI with GitHub Actions
-
-Configure the AWS credentials for an account used for CI, then run
-
-```bash
-npx cdk --app 'npx tsx cdk/ci.ts' deploy
-```
-
-This creates a role with Administrator privileges in that account, and allows
-the GitHub repository of this repo to assume it.
-
-Create a GitHub environment `ci`.
-
-<!-- FIXME: add CLI comment -->
-
-Store the role name from the output as a GitHub Action secret:
-
-```bash
-CI_ROLE_ARN=`aws cloudformation describe-stacks --stack-name ${STACK_NAME:-public-parameter-registry}-ci | jq -r '.Stacks[0].Outputs[] | select(.OutputKey == "roleArn") | .OutputValue' | sed -E 's/\/$//g'`
-gh variable set AWS_REGION --env ci --body "${AWS_REGION}"
-gh secret set AWS_ROLE --env ci --body "${CI_ROLE_ARN}"
-```

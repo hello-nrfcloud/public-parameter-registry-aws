@@ -3,8 +3,8 @@ import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import pJSON from '../package.json'
 import { RegistryApp } from './RegistryApp.js'
-import { ensureGitHubOIDCProvider } from './ensureGitHubOIDCProvider.js'
-import { packLambda } from './packLambda.js'
+import { ensureGitHubOIDCProvider } from '@bifravst/ci/ensureGitHubOIDCProvider'
+import { packLambda } from '@bifravst/aws-cdk-lambda-helpers'
 
 const repoUrl = new URL(pJSON.repository.url)
 const repository = {
