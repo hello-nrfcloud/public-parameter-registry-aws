@@ -62,7 +62,7 @@
     "npm": ">=9"
   },
   "volta": {
-    "node": "20.12.1"
+    "node": "20.12.2"
   },
   "release": {
     "branches": [
