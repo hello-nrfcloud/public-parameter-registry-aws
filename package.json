@@ -29,7 +29,7 @@
     "@aws-sdk/client-iam": "3.572.0",
     "@aws-sdk/client-s3": "3.572.0",
     "@aws-sdk/client-ssm": "3.572.0",
-    "@bifravst/aws-cdk-lambda-helpers": "1.7.16",
+    "@bifravst/aws-cdk-lambda-helpers": "1.7.17",
     "@bifravst/ci": "2.0.01",
     "@bifravst/eslint-config-typescript": "6.0.25",
     "@bifravst/prettier-config": "1.0.0",
