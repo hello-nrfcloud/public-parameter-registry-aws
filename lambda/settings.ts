@@ -1,8 +1,5 @@
-import {
-	GetParametersByPathCommand,
-	SSMClient,
-	type Parameter,
-} from '@aws-sdk/client-ssm'
+import type { SSMClient } from '@aws-sdk/client-ssm'
+import { GetParametersByPathCommand, type Parameter } from '@aws-sdk/client-ssm'
 import { paginate } from './paginate.js'
 import { parameterTree } from './parameterTree.js'
 

@@ -1,4 +1,5 @@
-import { Duration, aws_iam as IAM, Stack } from 'aws-cdk-lib'
+import type { Stack } from 'aws-cdk-lib'
+import { Duration, aws_iam as IAM } from 'aws-cdk-lib'
 import { Construct } from 'constructs'
 
 export class CD extends Construct {
