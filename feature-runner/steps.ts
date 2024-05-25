@@ -1,10 +1,10 @@
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import type { SSMClient } from '@aws-sdk/client-ssm'
 import {
 	DeleteParameterCommand,
 	DeleteParametersCommand,
 	ParameterType,
 	PutParameterCommand,
-	SSMClient,
 } from '@aws-sdk/client-ssm'
 import {
 	codeBlockOrThrow,
