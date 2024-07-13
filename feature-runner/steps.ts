@@ -10,7 +10,7 @@ import {
 	codeBlockOrThrow,
 	type StepRunner,
 	regExpMatchedStep,
-} from '@nordicsemiconductor/bdd-markdown'
+} from '@bifravst/bdd-markdown'
 import { randomUUID } from 'node:crypto'
 import { check, not, objectMatching, objectWithKeys } from 'tsmatchers'
 import { type World } from './run-features.js'
