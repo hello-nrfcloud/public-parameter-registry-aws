@@ -1,7 +1,4 @@
-import {
-	consoleReporter,
-	type SuiteResult,
-} from '@nordicsemiconductor/bdd-markdown'
+import { consoleReporter, type SuiteResult } from '@bifravst/bdd-markdown'
 
 const chunks: string[] = []
 
