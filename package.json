@@ -46,7 +46,7 @@
     "husky": "9.1.4",
     "p-retry": "6.2.0",
     "tsmatchers": "5.0.2",
-    "tsx": "4.16.5"
+    "tsx": "4.17.0"
   },
   "lint-staged": {
     "*.{md,json,yaml,yml}": [
