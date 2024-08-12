@@ -1,10 +1,10 @@
 import { IAMClient } from '@aws-sdk/client-iam'
+import { packLambda } from '@bifravst/aws-cdk-lambda-helpers'
+import { ensureGitHubOIDCProvider } from '@bifravst/ci'
 import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import pJSON from '../package.json'
 import { RegistryApp } from './RegistryApp.js'
-import { ensureGitHubOIDCProvider } from '@bifravst/ci'
-import { packLambda } from '@bifravst/aws-cdk-lambda-helpers'
 
 const repoUrl = new URL(pJSON.repository.url)
 const repository = {

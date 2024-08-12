@@ -8,14 +8,14 @@ import {
 } from '@aws-sdk/client-ssm'
 import {
 	codeBlockOrThrow,
-	type StepRunner,
 	regExpMatchedStep,
+	type StepRunner,
 } from '@bifravst/bdd-markdown'
+import { Type } from '@sinclair/typebox'
 import { randomUUID } from 'node:crypto'
+import pRetry from 'p-retry'
 import { check, not, objectMatching, objectWithKeys } from 'tsmatchers'
 import { type World } from './run-features.js'
-import { Type } from '@sinclair/typebox'
-import pRetry from 'p-retry'
 
 export const steps = ({
 	ssm,
