@@ -1,6 +1,6 @@
-import { parameterTree } from './parameterTree.js'
-import { describe, test as it } from 'node:test'
 import assert from 'node:assert'
+import { describe, test as it } from 'node:test'
+import { parameterTree } from './parameterTree.js'
 
 void describe('parameterTree()', () => {
 	void it('should create a tree structure from the given SSM parameters', () =>
