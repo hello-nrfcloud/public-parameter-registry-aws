@@ -30,7 +30,7 @@
     "@aws-sdk/client-s3": "3.629.0",
     "@aws-sdk/client-ssm": "3.629.0",
     "@bifravst/aws-cdk-lambda-helpers": "1.9.25",
-    "@bifravst/bdd-markdown": "8.2.13",
+    "@bifravst/bdd-markdown": "8.2.15",
     "@bifravst/ci": "2.0.01",
     "@bifravst/cloudformation-helpers": "9.1.1",
     "@bifravst/eslint-config-typescript": "6.1.13",
