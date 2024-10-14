@@ -44,7 +44,7 @@ export const handler = async (event: {
 		'@ts': new Date().toISOString(),
 		'@version': 1,
 		'@context':
-			'https://github.com/hello-nrfcloud/public-parameter-registry-aws-js',
+			'https://github.com/hello-nrfcloud/public-parameter-registry-aws',
 		...registry,
 	}
 	console.log(JSON.stringify({ json }, null, 2))
