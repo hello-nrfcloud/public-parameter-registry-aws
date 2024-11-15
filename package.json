@@ -44,7 +44,7 @@
     "check-node-version": "4.2.1",
     "constructs": "10.4.2",
     "husky": "9.1.6",
-    "p-retry": "6.2.0",
+    "p-retry": "6.2.1",
     "tsmatchers": "5.0.2",
     "tsx": "4.19.2"
   },
