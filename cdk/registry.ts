@@ -3,7 +3,7 @@ import { packLambda } from '@bifravst/aws-cdk-lambda-helpers'
 import { ensureGitHubOIDCProvider } from '@bifravst/ci'
 import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
-import pJSON from '../package.json'
+import pJSON from '../package.json' assert { type: 'json' }
 import { RegistryApp } from './RegistryApp.js'
 
 const repoUrl = new URL(pJSON.repository.url)
@@ -25,13 +25,13 @@ const pack = async (id: string, handler = 'handler'): Promise<PackedLambda> => {
 	} catch {
 		// Directory exists
 	}
-	const zipFile = path.join(process.cwd(), 'dist', 'lambdas', `${id}.zip`)
+	const zipFilePath = path.join(process.cwd(), 'dist', 'lambdas', `${id}.zip`)
 	await packLambda({
-		sourceFile: path.join(process.cwd(), 'lambda', `${id}.ts`),
-		zipFile,
+		sourceFilePath: path.join(process.cwd(), 'lambda', `${id}.ts`),
+		zipFilePath,
 	})
 	return {
-		lambdaZipFile: zipFile,
+		lambdaZipFile: zipFilePath,
 		handler: `${id}.${handler}`,
 	}
 }
