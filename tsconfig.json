@@ -17,7 +17,9 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "allowArbitraryExtensions": true,
+    "allowImportingTsExtensions": true
   },
   "exclude": ["cdk.out/**/*", "dist/**/*"]
 }

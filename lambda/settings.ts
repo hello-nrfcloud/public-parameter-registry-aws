@@ -1,7 +1,7 @@
 import type { SSMClient } from '@aws-sdk/client-ssm'
 import { GetParametersByPathCommand, type Parameter } from '@aws-sdk/client-ssm'
-import { paginate } from './paginate.js'
-import { parameterTree } from './parameterTree.js'
+import { paginate } from './paginate.ts'
+import { parameterTree } from './parameterTree.ts'
 
 export const settingsPath = ({ stackName }: { stackName: string }): string =>
 	`/${stackName}/public`

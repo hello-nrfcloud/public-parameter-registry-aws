@@ -15,7 +15,7 @@ import { Type } from '@sinclair/typebox'
 import { randomUUID } from 'node:crypto'
 import pRetry from 'p-retry'
 import { check, not, objectMatching, objectWithKeys } from 'tsmatchers'
-import { type World } from './run-features.js'
+import { type World } from './run-features.ts'
 
 export const steps = ({
 	ssm,

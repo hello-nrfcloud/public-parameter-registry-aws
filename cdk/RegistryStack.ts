@@ -11,9 +11,9 @@ import {
 	aws_s3 as S3,
 	Stack,
 } from 'aws-cdk-lib'
-import { CD } from './CD.js'
-import type { RegistryLambdas } from './RegistryLambdas.js'
-import { STACK_NAME } from './stackConfig.js'
+import { CD } from './CD.ts'
+import type { RegistryLambdas } from './RegistryLambdas.ts'
+import { STACK_NAME } from './stackConfig.ts'
 
 export class RegistryStack extends Stack {
 	public constructor(

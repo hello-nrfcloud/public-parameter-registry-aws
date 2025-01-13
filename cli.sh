@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-node --loader tsx ./cli/cli.ts "$@"
+node --experimental-transform-types ./cli/cli.ts "$@"

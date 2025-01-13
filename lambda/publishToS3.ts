@@ -4,7 +4,7 @@ import {
 } from '@aws-sdk/client-cloudfront'
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { SSMClient } from '@aws-sdk/client-ssm'
-import { getSettings } from './settings.js'
+import { getSettings } from './settings.ts'
 
 const stackName = process.env.STACK_NAME ?? ''
 const prefix = `/${stackName}/public/`

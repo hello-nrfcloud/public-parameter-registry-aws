@@ -4,9 +4,9 @@ import { runFolder } from '@bifravst/bdd-markdown'
 import { stackOutput } from '@bifravst/cloudformation-helpers'
 import chalk from 'chalk'
 import path from 'node:path'
-import type { StackOutputs } from '../cdk/RegistryStack.js'
-import { STACK_NAME } from '../cdk/stackConfig.js'
-import { steps } from './steps.js'
+import type { StackOutputs } from '../cdk/RegistryStack.ts'
+import { STACK_NAME } from '../cdk/stackConfig.ts'
+import { steps } from './steps.ts'
 
 const config = await stackOutput(new CloudFormationClient({}))<StackOutputs>(
 	STACK_NAME,

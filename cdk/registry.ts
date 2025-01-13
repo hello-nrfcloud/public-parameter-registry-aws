@@ -4,7 +4,7 @@ import { ensureGitHubOIDCProvider } from '@bifravst/ci'
 import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import pJSON from '../package.json' assert { type: 'json' }
-import { RegistryApp } from './RegistryApp.js'
+import { RegistryApp } from './RegistryApp.ts'
 
 const repoUrl = new URL(pJSON.repository.url)
 const repository = {
