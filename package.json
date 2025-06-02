@@ -38,7 +38,7 @@
     "@commitlint/config-conventional": "19.8.1",
     "@types/aws-lambda": "8.10.149",
     "aws-cdk": "2.1017.1",
-    "aws-cdk-lib": "2.199.0",
+    "aws-cdk-lib": "2.200.0",
     "cdk": "2.1017.1",
     "chalk": "5.4.1",
     "check-node-version": "4.2.1",
