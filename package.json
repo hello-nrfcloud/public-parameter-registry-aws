@@ -28,7 +28,7 @@
     "@aws-sdk/client-cloudfront": "3.848.0",
     "@aws-sdk/client-iam": "3.848.0",
     "@aws-sdk/client-s3": "3.848.0",
-    "@aws-sdk/client-ssm": "3.848.0",
+    "@aws-sdk/client-ssm": "3.849.0",
     "@bifravst/aws-cdk-lambda-helpers": "3.4.9",
     "@bifravst/bdd-markdown": "8.2.70",
     "@bifravst/ci": "2.0.01",
