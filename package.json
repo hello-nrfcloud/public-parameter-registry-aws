@@ -27,7 +27,7 @@
   "devDependencies": {
     "@aws-sdk/client-cloudfront": "3.891.0",
     "@aws-sdk/client-iam": "3.891.0",
-    "@aws-sdk/client-s3": "3.891.0",
+    "@aws-sdk/client-s3": "3.892.0",
     "@aws-sdk/client-ssm": "3.891.0",
     "@bifravst/aws-cdk-lambda-helpers": "3.5.27",
     "@bifravst/bdd-markdown": "8.2.78",
