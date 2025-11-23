@@ -36,7 +36,7 @@
     "@bifravst/eslint-config-typescript": "6.1.20",
     "@bifravst/prettier-config": "1.1.13",
     "@commitlint/config-conventional": "19.8.1",
-    "@types/aws-lambda": "8.10.156",
+    "@types/aws-lambda": "8.10.159",
     "aws-cdk": "2.1031.0",
     "aws-cdk-lib": "2.220.0",
     "cdk": "2.1031.0",
