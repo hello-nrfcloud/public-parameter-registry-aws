@@ -44,7 +44,7 @@
     "check-node-version": "4.2.1",
     "constructs": "10.4.5",
     "husky": "9.1.7",
-    "p-retry": "6.2.1",
+    "p-retry": "7.1.1",
     "tsmatchers": "5.0.2"
   },
   "lint-staged": {
