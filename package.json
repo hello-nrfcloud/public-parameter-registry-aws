@@ -37,7 +37,7 @@
     "@bifravst/prettier-config": "1.1.17",
     "@commitlint/config-conventional": "19.8.1",
     "@types/aws-lambda": "8.10.161",
-    "aws-cdk": "2.1114.1",
+    "aws-cdk": "2.1117.0",
     "aws-cdk-lib": "2.245.0",
     "cdk": "2.1114.1",
     "chalk": "5.6.2",
