@@ -39,7 +39,7 @@
     "@types/aws-lambda": "8.10.161",
     "aws-cdk": "2.1117.0",
     "aws-cdk-lib": "2.248.0",
-    "cdk": "2.1114.1",
+    "cdk": "2.1117.0",
     "chalk": "5.6.2",
     "check-node-version": "4.2.1",
     "constructs": "10.6.0",
