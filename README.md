@@ -69,3 +69,13 @@ gh secret set AWS_ROLE --env production --body "${CD_ROLE_ARN}"
 # If you've used a custom stack name
 gh variable set STACK_NAME --env production --body "${STACK_NAME}"
 ```
+
+## Node & NPM
+
+This project requires Node.js `>=22.7.0` and npm `>=12.0.2 <13` (enforced via
+`check-node-version` on `npm install` and `npm ci`).
+
+The check is skipped during `npm publish` and `npm pack`, because
+`semantic-release` bundles its own npm (`@semantic-release/npm` depends on
+`npm@^11.6.2`) and runs the publish with that version rather than the one
+installed in CI.
