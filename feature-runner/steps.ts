@@ -97,7 +97,7 @@ export const steps = ({
 							res.headers.forEach((v, k) => debug(`${k}: ${v}`))
 							const body = await res.text()
 							debug(body)
-							let result: Record<string, any> = {}
+							let result: Record<string, any>
 							try {
 								result = JSON.parse(body)
 							} catch {
@@ -136,7 +136,7 @@ export const steps = ({
 							)
 							const body = (await res.Body?.transformToString()) ?? ''
 							debug(body)
-							let result: Record<string, any> = {}
+							let result: Record<string, any>
 							try {
 								result = JSON.parse(body)
 							} catch {

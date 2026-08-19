@@ -6,7 +6,7 @@ export const parameterTree = (
 ): Record<string, any> => {
 	const prefixWithSlash = prefix.replace(/\/+$/, '') + '/'
 	return parameters
-		.filter(({ Name }) => Name?.startsWith(prefix))
+		.filter(({ Name }) => Name?.startsWith(prefix) ?? false)
 		.map((param) => ({
 			...param,
 			Name: param.Name?.replace(prefixWithSlash, '') ?? '',
