@@ -94,7 +94,7 @@ export class RegistryStack extends Stack {
 		const publishToS3 = new Lambda.Function(this, 'publishToS3', {
 			handler: lambdaSources.publishToS3.handler,
 			architecture: Lambda.Architecture.ARM_64,
-			runtime: Lambda.Runtime.NODEJS_18_X,
+			runtime: Lambda.Runtime.NODEJS_24_X,
 			timeout: Duration.minutes(1),
 			memorySize: 1792,
 			code: Lambda.Code.fromAsset(lambdaSources.publishToS3.lambdaZipFile),

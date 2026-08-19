@@ -19,7 +19,8 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "allowArbitraryExtensions": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "types": ["node"]
   },
   "exclude": ["cdk.out/**/*", "dist/**/*"]
 }
