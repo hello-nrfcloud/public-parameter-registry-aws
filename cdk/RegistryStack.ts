@@ -8,6 +8,7 @@ import {
 	aws_iam as IAM,
 	aws_lambda as Lambda,
 	aws_logs as Logs,
+	RemovalPolicy,
 	aws_s3 as S3,
 	Stack,
 } from 'aws-cdk-lib'
@@ -105,7 +106,10 @@ export class RegistryStack extends Stack {
 				BUCKET_NAME: bucket.bucketName,
 				CLOUDFRONT_DISTRIBUTION_ID: distribution.attrId,
 			},
-			logRetention: Logs.RetentionDays.ONE_WEEK,
+			logGroup: new Logs.LogGroup(this, 'publishToS3LogGroup', {
+				retention: Logs.RetentionDays.ONE_WEEK,
+				removalPolicy: RemovalPolicy.DESTROY,
+			}),
 			initialPolicy: [
 				new IAM.PolicyStatement({
 					actions: ['ssm:GetParametersByPath'],
