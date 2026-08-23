@@ -41,7 +41,7 @@
     "@typescript/native": "npm:typescript@7.0.2",
     "aws-cdk": "2.1138.0",
     "aws-cdk-lib": "2.265.0",
-    "cdk": "2.1137.0",
+    "cdk": "2.1138.0",
     "chalk": "6.0.0",
     "check-node-version": "4.2.1",
     "constructs": "10.8.1",
