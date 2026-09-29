@@ -29,7 +29,7 @@
     "@aws-sdk/client-iam": "3.1141.0",
     "@aws-sdk/client-s3": "3.1141.0",
     "@aws-sdk/client-ssm": "3.1141.0",
-    "@bifravst/aws-cdk-lambda-helpers": "5.0.7",
+    "@bifravst/aws-cdk-lambda-helpers": "5.1.1",
     "@bifravst/bdd-markdown": "9.0.3",
     "@bifravst/ci": "3.0.1",
     "@bifravst/cloudformation-helpers": "10.0.1",
