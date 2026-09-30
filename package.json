@@ -42,7 +42,7 @@
     "aws-cdk": "2.1143.0",
     "aws-cdk-lib": "2.265.0",
     "cdk": "2.1143.0",
-    "chalk": "6.0.0",
+    "chalk": "6.0.1",
     "check-node-version": "4.2.1",
     "constructs": "10.8.1",
     "husky": "9.1.7",
